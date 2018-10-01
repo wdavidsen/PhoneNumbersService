@@ -2,7 +2,7 @@ package com.phone.model;
 
 public class GenerateStatus {
 
-	private int totalNumbers;
+	private long totalNumbers;
 	private boolean ready;
 	private boolean missing;
 	
@@ -12,10 +12,10 @@ public class GenerateStatus {
 	public void setMissing(boolean missing) {
 		this.missing = missing;
 	}
-	public int getTotalNunbers() {
+	public long getTotalNunbers() {
 		return totalNumbers;
 	}
-	public void setTotalNunbers(int totalNunbers) {
+	public void setTotalNunbers(long totalNunbers) {
 		this.totalNumbers = totalNunbers;
 	}
 	public boolean isReady() {

@@ -17,24 +17,27 @@ import com.phone.model.GenerateStatus;
 import com.phone.model.PhoneNumber;
 import com.phone.model.ReferenceNumber;
 import com.phone.model.SimpleMessage;
-import com.phone.service.NumberVariantBuilder;
+import com.phone.service.INumberVariantBuilder;
 
 @RestController
-public class PhoneController {
+public class PhoneController implements IPhoneController {
 
 	@Autowired
-	private NumberVariantBuilder numberVariantBuilder;
+	private INumberVariantBuilder numberVariantBuilder;
 	
+	@Override
 	@RequestMapping("/")
 	public String home() {
+		//TODO: put this string in a resource file
 		return "Welcome to the Alpha-Numeric Phone Number Generator";
 	}
 	
+	@Override
 	@RequestMapping(method=RequestMethod.POST, value="/variants", produces={MediaType.APPLICATION_JSON_VALUE})
-	public @ResponseBody ResponseEntity<?> getVariants(@RequestBody PhoneNumber phoneNumber) {
+	public @ResponseBody ResponseEntity<?> generateVariants(@RequestBody PhoneNumber phoneNumber) {
 		
 		try {
-			String refNum = numberVariantBuilder.BuildVariants(phoneNumber);
+			String refNum = numberVariantBuilder.buildVariants(phoneNumber);
 			ReferenceNumber reference = new ReferenceNumber(refNum);
 			return new ResponseEntity<ReferenceNumber>(reference, HttpStatus.OK);
 		}
@@ -43,22 +46,26 @@ public class PhoneController {
 		}
 	}
 	
+	@Override
 	@RequestMapping(method=RequestMethod.GET, value="/variants/{referenceNumber}/status", produces={MediaType.APPLICATION_JSON_VALUE})
 	public @ResponseBody ResponseEntity<?> getStatus(@PathVariable String referenceNumber) {
-		GenerateStatus status = numberVariantBuilder.ReadyCheck(referenceNumber);
+		GenerateStatus status = numberVariantBuilder.readyCheck(referenceNumber);
 		return new ResponseEntity<GenerateStatus>(status, HttpStatus.OK);
 	}
 	
+	@Override
 	@RequestMapping(method=RequestMethod.GET, value="/variants/{referenceNumber}", params={"start", "take"}, produces={MediaType.APPLICATION_JSON_VALUE})
 	public @ResponseBody ResponseEntity<?> getPhoneNumberVariants(@PathVariable String referenceNumber, @RequestParam int start, @RequestParam int take) {
 		
-		if (!numberVariantBuilder.ReadyCheck(referenceNumber).isReady()) {
+		//TODO: put these strings in a resource file
+		//
+		if (!numberVariantBuilder.readyCheck(referenceNumber).isReady()) {
 			final String msg = "Your variants are not ready yet.";
 			return new ResponseEntity<SimpleMessage>(new SimpleMessage(msg), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
-			GenerateResult results = numberVariantBuilder.GetVariants(referenceNumber, start, take);
+			GenerateResult results = numberVariantBuilder.getVariants(referenceNumber, start, take);
 			return new ResponseEntity<GenerateResult>(results, HttpStatus.OK);
 		}
 		catch (IllegalArgumentException ex) {			

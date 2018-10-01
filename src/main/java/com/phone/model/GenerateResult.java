@@ -1,11 +1,10 @@
 package com.phone.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenerateResult {
 	
-	int totalCount;
+	long totalCount;
 	List<String> numberVariants;
 	
 	public GenerateResult() {}
@@ -14,10 +13,10 @@ public class GenerateResult {
 		this.numberVariants = variants;
 	}
 	
-	public int getTotalCount() {
+	public long getTotalCount() {
 		return totalCount;
 	}
-	public void setTotalCount(int totalCount) {
+	public void setTotalCount(long totalCount) {
 		this.totalCount = totalCount;
 	}
 	public List<String> getNumberVariants() {
@@ -28,13 +27,14 @@ public class GenerateResult {
 	}	
 	
 	public GenerateResult getSubset(int start, int take) {
-		List<String> subset = new ArrayList<String>();
 		
 		int end = start + take;
 		if (end > numberVariants.size() - 1) {
 			end = numberVariants.size() - 1;
 		}
-		subset = this.numberVariants.subList(start, end);
-		return new GenerateResult(subset);		
+		GenerateResult subset = new GenerateResult(this.numberVariants.subList(start, end));
+		subset.setTotalCount(this.getTotalCount());
+		
+		return subset;		
 	}
 }
