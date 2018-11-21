@@ -15,7 +15,7 @@ import com.phone.model.PhoneNumber;
 public class NumberVariantBuilder implements INumberVariantBuilder {
 
 	private static Map<String, GenerateResult> cache; 
-	private static String keyMappings[][] = {
+	private static final String[][] keyMappings = {
 			{"0"},
 	        {"1"}, 
 	        {"2", "A", "B", "C"}, 
@@ -28,8 +28,8 @@ public class NumberVariantBuilder implements INumberVariantBuilder {
 	        {"9", "W", "X", "Y", "Z"}
 	    };
 	
-	NumberVariantBuilder() {
-		cache = new HashMap<String, GenerateResult>();
+	public NumberVariantBuilder() {
+		cache = new HashMap<>();
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class NumberVariantBuilder implements INumberVariantBuilder {
 		status.setReady(cache.get(referenceId) != null);
 				
 		if (status.isReady())	{
-			status.setTotalNunbers(cache.get(referenceId).getTotalCount());
+			status.setTotalNumbers(cache.get(referenceId).getTotalCount());
 		}		
 		return status;
 	}
@@ -79,7 +79,7 @@ public class NumberVariantBuilder implements INumberVariantBuilder {
 	private void generate(String referenceId, long number)	{	
 		if (cache.containsKey(referenceId)) return;
 		
-		List<String> combos = new ArrayList<String>();
+		List<String> combos = new ArrayList<>();
 			
 		cache.put(referenceId, null);
 		
@@ -90,7 +90,7 @@ public class NumberVariantBuilder implements INumberVariantBuilder {
 	}
 	
 	private void generate_recur(List<String> combos, String endingChars, String beginningChars)	{
-		
+
         int digit = Integer.parseInt(endingChars.substring(0, 1));
         
         if (endingChars.length() > 1) {

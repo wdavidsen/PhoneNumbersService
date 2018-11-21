@@ -1,7 +1,7 @@
 package com.phone.model;
 
 public class SimpleMessage {
-	String message;
+	private String message;
 
 	public SimpleMessage(String message) {
 		this.message = message;

@@ -12,11 +12,11 @@ public class GenerateStatus {
 	public void setMissing(boolean missing) {
 		this.missing = missing;
 	}
-	public long getTotalNunbers() {
+	public long getTotalNumbers() {
 		return totalNumbers;
 	}
-	public void setTotalNunbers(long totalNunbers) {
-		this.totalNumbers = totalNunbers;
+	public void setTotalNumbers(long totalNumbers) {
+		this.totalNumbers = totalNumbers;
 	}
 	public boolean isReady() {
 		return ready;

@@ -3,6 +3,7 @@ package com.phone.controller;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import com.phone.service.INumberVariantBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -29,7 +30,8 @@ public class PhoneControllerTests {
 	
 	@Test
 	public void homeTest() {
-		IPhoneController controller = new PhoneController();
+		INumberVariantBuilder variantBuilder = new NumberVariantBuilder();
+		IPhoneController controller = new PhoneController(variantBuilder);
 		String result = controller.home();
 		
 		assertEquals(result, "Welcome to the Alpha-Numeric Phone Number Generator");
@@ -46,7 +48,8 @@ public class PhoneControllerTests {
 		ResponseEntity<?> result = phoneController.generateVariants(new PhoneNumber(3015553789L));
 				
 		ReferenceNumber entity = (ReferenceNumber)result.getBody();
-		
+
+		assert entity != null;
 		assertEquals(entity.getNumber(), "ref3015553789");
 	}
 }

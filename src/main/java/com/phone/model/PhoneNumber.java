@@ -1,7 +1,7 @@
 package com.phone.model;
 
 public class PhoneNumber {
-	long number;
+	private long number;
 
 	public PhoneNumber() {}
 	public PhoneNumber(long number) {

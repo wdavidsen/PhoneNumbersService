@@ -22,9 +22,13 @@ import com.phone.service.INumberVariantBuilder;
 @RestController
 public class PhoneController implements IPhoneController {
 
+	private final INumberVariantBuilder numberVariantBuilder;
+
 	@Autowired
-	private INumberVariantBuilder numberVariantBuilder;
-	
+	public PhoneController(INumberVariantBuilder numberVariantBuilder) {
+		this.numberVariantBuilder = numberVariantBuilder;
+	}
+
 	@Override
 	@RequestMapping("/")
 	public String home() {
@@ -39,10 +43,10 @@ public class PhoneController implements IPhoneController {
 		try {
 			String refNum = numberVariantBuilder.buildVariants(phoneNumber);
 			ReferenceNumber reference = new ReferenceNumber(refNum);
-			return new ResponseEntity<ReferenceNumber>(reference, HttpStatus.OK);
+			return new ResponseEntity<>(reference, HttpStatus.OK);
 		}
 		catch (IllegalArgumentException ex) {
-			return new ResponseEntity<SimpleMessage>(new SimpleMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new SimpleMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -50,7 +54,7 @@ public class PhoneController implements IPhoneController {
 	@RequestMapping(method=RequestMethod.GET, value="/variants/{referenceNumber}/status", produces={MediaType.APPLICATION_JSON_VALUE})
 	public @ResponseBody ResponseEntity<?> getStatus(@PathVariable String referenceNumber) {
 		GenerateStatus status = numberVariantBuilder.readyCheck(referenceNumber);
-		return new ResponseEntity<GenerateStatus>(status, HttpStatus.OK);
+		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 	
 	@Override
@@ -61,19 +65,19 @@ public class PhoneController implements IPhoneController {
 		//
 		if (!numberVariantBuilder.readyCheck(referenceNumber).isReady()) {
 			final String msg = "Your variants are not ready yet.";
-			return new ResponseEntity<SimpleMessage>(new SimpleMessage(msg), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new SimpleMessage(msg), HttpStatus.BAD_REQUEST);
 		}
 		
 		try {
 			GenerateResult results = numberVariantBuilder.getVariants(referenceNumber, start, take);
-			return new ResponseEntity<GenerateResult>(results, HttpStatus.OK);
+			return new ResponseEntity<>(results, HttpStatus.OK);
 		}
 		catch (IllegalArgumentException ex) {			
-			return new ResponseEntity<SimpleMessage>(new SimpleMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(new SimpleMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception ex) {
 			final String msg = "We're sorry, but an unexpected error occurred.";
-			return new ResponseEntity<SimpleMessage>(new SimpleMessage(msg), HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(new SimpleMessage(msg), HttpStatus.INTERNAL_SERVER_ERROR);
 		}		
 	}
 }

@@ -4,8 +4,8 @@ import java.util.List;
 
 public class GenerateResult {
 	
-	long totalCount;
-	List<String> numberVariants;
+	private long totalCount;
+	private List<String> numberVariants;
 	
 	public GenerateResult() {}
 	public GenerateResult(List<String> variants) {
@@ -16,7 +16,7 @@ public class GenerateResult {
 	public long getTotalCount() {
 		return totalCount;
 	}
-	public void setTotalCount(long totalCount) {
+	private void setTotalCount(long totalCount) {
 		this.totalCount = totalCount;
 	}
 	public List<String> getNumberVariants() {
